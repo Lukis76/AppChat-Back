@@ -1,4 +1,4 @@
-import gql from 'graphql-tag'
+import gql from "graphql-tag";
 
 export const userTypeDefs = gql`
   type User {
@@ -27,4 +27,4 @@ export const userTypeDefs = gql`
     success: Boolean
     error: String
   }
-`
+`;

@@ -1,4 +1,7 @@
-import { ConversationUpdatedSubscriptionData, GraphQLContext } from "@utils/types";
+import {
+  ConversationUpdatedSubscriptionData,
+  GraphQLContext,
+} from "@utils/types";
 import { GraphQLError } from "graphql";
 import { subscriptionEvent } from "../";
 
@@ -12,7 +15,11 @@ export const updated = {
     //------------------------------------------------------------------
   },
   //////////////////////////////////////////////////////////////////////
-  Filter: (payload: ConversationUpdatedSubscriptionData, _: any, context: GraphQLContext) => {
+  Filter: (
+    payload: ConversationUpdatedSubscriptionData,
+    _: any,
+    context: GraphQLContext
+  ) => {
     //--------------------------
     const { session } = context;
     //-----------------------------------------
@@ -22,7 +29,9 @@ export const updated = {
     //--------------------------------------------------------
     const { participants, latestMsg } = payload.conversationUpdated;
     //---------------------------------------------------------------------------------
-    const userIsParticipant = !!participants.find((p) => p.user.id === session.user?.id);
+    const userIsParticipant = !!participants.find(
+      (p) => p.user.id === session.user?.id
+    );
     //---------------------------------------------------------------------------------
     const userSentLatestMsg = latestMsg?.senderId === session.user.id;
     //-------------------------------------------------------------------

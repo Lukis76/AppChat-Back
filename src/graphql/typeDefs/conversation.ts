@@ -1,4 +1,4 @@
-import gql from 'graphql-tag'
+import gql from "graphql-tag";
 
 export const conversationTypeDefs = gql`
   type CreateConversationResponse {
@@ -37,4 +37,4 @@ export const conversationTypeDefs = gql`
   type Subscription {
     conversationUpdated: Conversation
   }
-`
+`;

@@ -1,6 +1,6 @@
-import { GraphQLContext } from "@utils/types";
-import { GraphQLError } from "graphql";
-import { subscriptionEvent } from "../";
+import { GraphQLContext } from '@utils/types'
+import { GraphQLError } from 'graphql'
+import { subscriptionEvent } from '../'
 
 export const createConversation = async (
   _: any,
@@ -8,12 +8,12 @@ export const createConversation = async (
   context: GraphQLContext
 ): Promise<{ conversationId: string }> => {
   ////////////////////////////////////////////
-  const { prisma, session, pubsub } = context;
-  const { participantIds } = args;
+  const { prisma, session, pubsub } = context
+  const { participantIds } = args
   //------------------------------------------
   // authorized
   if (!session?.user) {
-    throw new GraphQLError("Not authorized");
+    throw new GraphQLError('Not authorized')
   }
   //--------------------------------------------------------
   try {
@@ -41,17 +41,17 @@ export const createConversation = async (
           },
         },
       },
-    });
+    })
     //////////////////////////////////////////
     // emit a conversation event using pubsub
     pubsub.publish(subscriptionEvent.conversationCreated, {
       conversationCreated: conversation,
-    });
+    })
     //----------------------------------------
-    return { conversationId: conversation.id };
+    return { conversationId: conversation.id }
     //----------------------------------------
   } catch (err) {
-    console.log("CreateConversationError", err);
-    throw new GraphQLError("Error created conversation");
+    console.log('CreateConversationError', err)
+    throw new GraphQLError('Error created conversation')
   }
-};
+}

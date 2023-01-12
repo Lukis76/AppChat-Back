@@ -1,5 +1,5 @@
-import { GraphQLContext, MsgFE } from '@utils/types'
-import { GraphQLError } from 'graphql'
+import { GraphQLContext, MsgFE } from "@utils/types";
+import { GraphQLError } from "graphql";
 
 ///////////// Query Msg //////////////
 export const msgs = async (
@@ -8,11 +8,11 @@ export const msgs = async (
   context: GraphQLContext
 ): Promise<Array<MsgFE>> => {
   /////////////////////////////////////
-  const { session, prisma } = context
-  const { conversationId } = args
+  const { session, prisma } = context;
+  const { conversationId } = args;
   ////////////////////////////////
   if (!session?.user) {
-    throw new GraphQLError('Not authorized')
+    throw new GraphQLError("Not authorized");
   }
   // ////////////////////////////////////////////////////////////
   // // Verify participant
@@ -52,14 +52,14 @@ export const msgs = async (
         },
       },
       orderBy: {
-        createdAt: 'desc',
+        createdAt: "desc",
       },
-    })
+    });
     /////////////
-    return msgs
+    return msgs;
     ///////////////////
   } catch (err: any) {
-    console.log('Msgs Error', err)
-    throw new GraphQLError('Error Msgs')
+    console.log("Msgs Error", err);
+    throw new GraphQLError("Error Msgs");
   }
-}
+};

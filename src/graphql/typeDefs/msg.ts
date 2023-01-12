@@ -1,4 +1,4 @@
-import gql from 'graphql-tag'
+import gql from "graphql-tag";
 
 export const msgTypeDefs = gql`
   scalar Date
@@ -26,4 +26,4 @@ export const msgTypeDefs = gql`
   type Subscription {
     msgSend(conversationId: String): Msg
   }
-`
+`;

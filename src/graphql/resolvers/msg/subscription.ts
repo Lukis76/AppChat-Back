@@ -1,13 +1,13 @@
-import { GraphQLContext, SendMsgSubscriptionPayload } from '@utils/types'
-import { subscriptionEvent } from '.'
+import { GraphQLContext, SendMsgSubscriptionPayload } from "@utils/types";
+import { subscriptionEvent } from ".";
 
 ////////// Subscription Msg //////////
 export const send = {
   //////////////////////////////////////////////////////////
   Resolver: (_: any, __: any, context: GraphQLContext) => {
-    const { pubsub } = context
+    const { pubsub } = context;
     //------------------------------------------------------
-    return pubsub.asyncIterator([subscriptionEvent.msgSend])
+    return pubsub.asyncIterator([subscriptionEvent.msgSend]);
     //------------------------------------------------------
   },
   ////////////////////////////////////////////////////////////
@@ -17,8 +17,8 @@ export const send = {
     _: GraphQLContext
   ) => {
     //------------------------------------------------------------
-    return payload.msgSend.conversationId === args.conversationId
+    return payload.msgSend.conversationId === args.conversationId;
     //-----------------------------------------------------------
   },
   ////////////////////////////////////////////////////////////////
-}
+};

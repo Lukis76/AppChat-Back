@@ -1,6 +1,6 @@
-import { GraphQLContext, SendMsgArgs } from '@utils/types'
-import { GraphQLError } from 'graphql'
-import { subscriptionEvent } from '.'
+import { GraphQLContext, SendMsgArgs } from "@utils/types";
+import { GraphQLError } from "graphql";
+import { subscriptionEvent } from ".";
 
 ///////////// Mutation Msg///////////////
 export const sendMsg = async (
@@ -9,12 +9,12 @@ export const sendMsg = async (
   context: GraphQLContext
 ): Promise<boolean> => {
   ////////////////////////////////////////////
-  const { prisma, session, pubsub } = context
-  const { id: msgId, senderId, conversationId, body } = args
+  const { prisma, session, pubsub } = context;
+  const { id: msgId, senderId, conversationId, body } = args;
   ///////////////////////////////////////////////////////////
   // authorized
   if (!session?.user || session.user.id !== senderId) {
-    throw new GraphQLError('Not authorized')
+    throw new GraphQLError("Not authorized");
   }
   ///////////////////////////////////////////
   try {
@@ -34,9 +34,8 @@ export const sendMsg = async (
           },
         },
       },
-    })
-    console.log("🚀 ~ file: mutation.ts:38 ~ newMsg", newMsg)
-
+    });
+    console.log("🚀 ~ file: mutation.ts:38 ~ newMsg", newMsg);
 
     /////////////////////////////////////////////////////////////////////
     const participant = await prisma.conversationParticipant.findFirst({
@@ -44,11 +43,11 @@ export const sendMsg = async (
         userId: session.user.id,
         conversationId,
       },
-    })
-    console.log("🚀 ~ file: mutation.ts:48 ~ participant", participant)
+    });
+    console.log("🚀 ~ file: mutation.ts:48 ~ participant", participant);
     ///////////////////////////////////////////////////////
     if (!participant) {
-      throw new GraphQLError('Participant does not exist')
+      throw new GraphQLError("Participant does not exist");
     }
     //////////////////////////////////////////////////////
     // Update Coversation
@@ -61,7 +60,6 @@ export const sendMsg = async (
         participants: {
           update: {
             where: {
-
               id: participant?.id,
             },
             data: {
@@ -102,22 +100,22 @@ export const sendMsg = async (
           },
         },
       },
-    })
-    console.log("🚀 ~ file: mutation.ts:106 ~ conversation", conversation)
+    });
+    console.log("🚀 ~ file: mutation.ts:106 ~ conversation", conversation);
     /////////////////////////////////////////////////////
     pubsub.publish(subscriptionEvent.msgSend, {
       msgSend: newMsg,
-    })
+    });
     pubsub.publish(subscriptionEvent.conversationUpdated, {
       conversationUpdated: {
         conversation,
       },
-    })
+    });
     ////////////////////////////////////
-    return true
+    return true;
     /////////////////////////////////////
   } catch (err) {
-    console.log('Send Msg Error', err)
-    throw new GraphQLError('Error send msg')
+    console.log("Send Msg Error", err);
+    throw new GraphQLError("Error send msg");
   }
-}
+};

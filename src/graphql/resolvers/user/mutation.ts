@@ -1,4 +1,4 @@
-import { CreateUsernameResponse, GraphQLContext } from '@utils/types'
+import { CreateUsernameResponse, GraphQLContext } from "@utils/types";
 
 /////////////// Mutation ///////////////
 export const createUsername = async (
@@ -6,28 +6,28 @@ export const createUsername = async (
   args: { username: string },
   context: GraphQLContext
 ): Promise<CreateUsernameResponse> => {
-  const { session, prisma } = context
+  const { session, prisma } = context;
 
   if (!session?.user) {
     return {
-      error: 'Not authorized',
-    }
+      error: "Not authorized",
+    };
   }
   // @ts-ignore
-  const { id } = session?.user
-  const { username } = args
+  const { id } = session?.user;
+  const { username } = args;
 
   try {
     const existingUser = await prisma.user.findUnique({
       where: {
         username,
       },
-    })
+    });
 
     if (existingUser) {
       return {
-        error: 'Username already taken. Try another',
-      }
+        error: "Username already taken. Try another",
+      };
     }
     await prisma.user.update({
       where: {
@@ -36,13 +36,13 @@ export const createUsername = async (
       data: {
         username,
       },
-    })
+    });
 
-    return { success: true }
+    return { success: true };
   } catch (err) {
-    console.log('CreateUsername error', err)
+    console.log("CreateUsername error", err);
     return {
       error: err?.message,
-    }
+    };
   }
-}
+};

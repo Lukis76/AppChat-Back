@@ -1,3 +1,3 @@
-import { createUsername } from './mutation';
-import { searchUsers } from './query';
+import { createUsername } from "./mutation";
+import { searchUsers } from "./query";
 export { createUsername, searchUsers };

@@ -1,6 +1,7 @@
 import {
   createConversation,
   conversationRead,
+  deletedConversation,
   conversations,
   created,
   updated,
@@ -16,6 +17,7 @@ export const resolvers = {
     msgs,
   },
   Mutation: {
+    deletedConversation,
     createConversation,
     conversationRead,
     createUsername,
