@@ -15,12 +15,7 @@ export const msgTypeDefs = gql`
   }
 
   type Mutation {
-    sendMsg(
-      id: String
-      conversationId: String
-      senderId: String
-      body: String
-    ): Boolean
+    sendMsg(id: String, conversationId: String, senderId: String, body: String): Boolean
   }
 
   type Subscription {

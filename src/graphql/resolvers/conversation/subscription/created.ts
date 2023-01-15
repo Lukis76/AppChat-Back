@@ -1,4 +1,4 @@
-import { ConversationCreatedSubscriptionPayload, GraphQLContext } from "@utils/types";
+import { ConversationCreatedSubscriptionData, GraphQLContext } from "@utils/types";
 import { GraphQLError } from "graphql";
 import { subscriptionEvent } from "../";
 
@@ -12,7 +12,7 @@ export const created = {
     //-------------------------------------------------------------------
   },
   //////////////////////////////////////////////////////////////////
-  Filter: (payload: ConversationCreatedSubscriptionPayload, _: any, context: GraphQLContext) => {
+  Filter: (payload: ConversationCreatedSubscriptionData, _: any, context: GraphQLContext) => {
     //-------------------------
     const { session } = context;
     //----------------------------------------

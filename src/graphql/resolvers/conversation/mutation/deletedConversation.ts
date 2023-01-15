@@ -2,7 +2,7 @@ import { GraphQLContext } from "@utils/types";
 import { GraphQLError } from "graphql";
 import { subscriptionEvent } from "../";
 
-export const deletedConversation = async (
+export const deleteConversation = async (
   _: any,
   args: { conversationId: string },
   context: GraphQLContext

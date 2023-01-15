@@ -14,28 +14,47 @@ export const msgs = async (
   if (!session?.user) {
     throw new GraphQLError("Not authorized");
   }
-  // ////////////////////////////////////////////////////////////
-  // // Verify participant
-  // const conversation = await prisma.conversation.findUnique({
-  //   where: {
-  //     id: conversationId,
-  //   },
-  //   include: {
-  //     participants: true,
-  //   },
-  // })
-  // /////////////////////////////////////////////////////////
-  // if (!conversation) {
-  //   throw new GraphQLError('Conversation not authorized')
-  // }
-  // /////////////////////////////////////////////////////
-  // const allowedView = conversation.participants.find(
-  //   (p) => p.userId === session.user?.id
-  // )
-  // //////////////////////////////////////////
-  // if (!allowedView) {
-  //   throw new Error('Not Authorized')
-  // }
+  ////////////////////////////////////////////////////////////
+  // Verify participant
+  const conversation = await prisma.conversation.findUnique({
+    where: {
+      id: conversationId,
+    },
+    include: {
+      participants: {
+        include: {
+          user: {
+            select: {
+              id: true,
+              username: true,
+            },
+          },
+        }
+      },
+      latestMsg: {
+        include: {
+          sender: {
+            select: {
+              id: true,
+              username: true,
+            },
+          },
+        },
+      },
+    },
+  })
+  /////////////////////////////////////////////////////////
+  if (!conversation) {
+    throw new GraphQLError('Conversation not authorized')
+  }
+  ///////////////////////////////////////////////////
+  const allowedView = !!conversation.participants.find(
+    (p) => p.userId === session.user?.id
+  )
+  ////////////////////////////////////////
+  if (!allowedView) {
+    throw new Error('Not Authorized')
+  }
 
   ////////////////////////////////////////////
   try {

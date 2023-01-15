@@ -1,10 +1,13 @@
 import {
   createConversation,
   conversationRead,
-  deletedConversation,
+  updateParticipants,
+  deleteConversation,
   conversations,
   created,
   updated,
+  deleted
+
 } from "./conversation";
 import { createUsername, searchUsers } from "./user";
 import { withFilter } from "graphql-subscriptions";
@@ -12,15 +15,16 @@ import { msgs, sendMsg, send } from "./msg";
 
 export const resolvers = {
   Query: {
-    conversations,
-    searchUsers,
-    msgs,
+    conversations,//
+    searchUsers,//
+    msgs,//
   },
   Mutation: {
-    deletedConversation,
+    deleteConversation,
+    updateParticipants,
     createConversation,
     conversationRead,
-    createUsername,
+    createUsername,//
     sendMsg,
   },
   Subscription: {
@@ -28,10 +32,13 @@ export const resolvers = {
       subscribe: withFilter(created.Resolver, created.Filter),
     },
     msgSend: {
-      subscribe: withFilter(send.Resolver, send.Filter),
+      subscribe: withFilter(send.Resolver, send.Filter),//
     },
     conversationUpdated: {
       subscribe: withFilter(updated.Resolver, updated.Filter),
     },
+    conversationDeleted: {
+      subscribe: withFilter(deleted.Resolver, deleted.Filter)
+    }
   },
 };

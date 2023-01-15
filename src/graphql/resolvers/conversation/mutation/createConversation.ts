@@ -24,7 +24,7 @@ export const createConversation = async (
           createMany: {
             data: participantIds.map((id) => ({
               userId: id,
-              hasSeenLatestMsg: false,
+              hasSeenLatestMsg: id === session.user?.id,
             })),
           },
         },
@@ -40,6 +40,16 @@ export const createConversation = async (
             },
           },
         },
+        latestMsg: {
+          include: {
+            sender: {
+              select: {
+                id: true,
+                username: true,
+              }
+            }
+          }
+        }
       },
     });
     //////////////////////////////////////////
