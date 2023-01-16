@@ -16,11 +16,16 @@ export const conversationRead = async (
   }
   //-------------------------------------------------
   try {
-    await prisma.conversationParticipant.updateMany({
-      where: {
-        userId,
-        conversationId,
-      },
+    const participant = await prisma.conversationParticipant.findFirst({
+      where: { userId, conversationId },
+    });
+    //------------------------------------------------
+    if (!participant) {
+      throw new GraphQLError("Participant not found");
+    }
+    //------------------------------------------------
+    await prisma.conversationParticipant.update({
+      where: { id: participant.id },
       data: {
         hasSeenLatestMsg: true,
       },

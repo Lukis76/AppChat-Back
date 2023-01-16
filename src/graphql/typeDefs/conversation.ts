@@ -13,8 +13,8 @@ export const conversationTypeDefs = gql`
 
   type ConversationUpdatedSubscriptionPayload {
     conversation: Conversation
-    addedUserIds: [String]
-    removedUserIds: [String]
+    addUserIds: [String]
+    removeUserIds: [String]
   }
 
   type Conversation {
