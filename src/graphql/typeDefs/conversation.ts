@@ -7,7 +7,7 @@ export const conversationTypeDefs = gql`
     conversationId: String
   }
 
-  type ConversationDeletedResponse {
+  type ConversationDeletedSubscriptionPayload {
     id: String
   }
 
@@ -48,6 +48,10 @@ export const conversationTypeDefs = gql`
   }
 
   type Mutation {
+    leaveConversation(conversationId: String!): Boolean
+  }
+
+  type Mutation {
     updateParticipants(conversationId: String!, participantIds: [String]!): Boolean
   }
 
@@ -60,6 +64,6 @@ export const conversationTypeDefs = gql`
   }
 
   type Subscription {
-    conversationDeleted: ConversationDeletedResponse
+    conversationDeleted: ConversationDeletedSubscriptionPayload
   }
 `;
