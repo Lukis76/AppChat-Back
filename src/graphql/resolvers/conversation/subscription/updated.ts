@@ -1,4 +1,4 @@
-import { ConversationUpdatedSubscriptionData, GraphQLContext } from "@utils/types";
+import { ConversationUpdatedSubscriptionData, GraphQLContext } from "../../../../utils/types";
 import { GraphQLError } from "graphql";
 import { subscriptionEvent } from "../";
 
@@ -18,7 +18,7 @@ export const updated = {
     console.log("><><><><><><><><><><><><", payload);
     console.log("><><><><><><><><><><><><", payload.conversationUpdated.conversation.participants);
     //-----------------------------------------
-    if (!session?.user) {
+    if (!session) {
       throw new GraphQLError("Not authorized");
     }
     //-------------------------------------------------------------------------------

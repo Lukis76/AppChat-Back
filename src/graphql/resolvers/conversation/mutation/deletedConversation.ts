@@ -1,4 +1,5 @@
-import { GraphQLContext } from "@utils/types";
+import { GraphQLContext} from "../../../../utils/types";
+
 import { GraphQLError } from "graphql";
 import { subscriptionEvent } from "../";
 
@@ -8,7 +9,7 @@ export const deleteConversation = async (_: any, args: { conversationId: string 
   const { conversationId } = args;
   ////////////////////////////////
   // authorized
-  if (!session?.user) {
+  if (!session) {
     throw new GraphQLError("Not authorized");
   }
   ///////////////////////////////////////////

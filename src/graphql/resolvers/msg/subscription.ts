@@ -1,4 +1,4 @@
-import { GraphQLContext, SendMsgSubscriptionPayload } from "@utils/types";
+import { GraphQLContext, SendMsgSubscriptionPayload } from "../../../utils/types";
 import { subscriptionEvent } from ".";
 
 ////////// Subscription Msg //////////

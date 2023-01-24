@@ -1,4 +1,4 @@
-import { ConversationCreatedSubscriptionData, GraphQLContext } from "@utils/types";
+import { ConversationCreatedSubscriptionData, GraphQLContext } from "../../../../utils/types";
 import { GraphQLError } from "graphql";
 import { subscriptionEvent } from "../";
 
@@ -12,7 +12,7 @@ export const created = {
   /////////////////////////////////////////////////////////////////////////////////////////////
   Filter: (payload: ConversationCreatedSubscriptionData, _: any, context: GraphQLContext) => {
     //----------------------------------------------------------------------------------------
-    if (!context?.session?.user) {
+    if (!context?.session) {
       throw new GraphQLError("Not authorized");
     }
     //-----------------------------------------------------------------------------------------------------
@@ -21,3 +21,4 @@ export const created = {
   },
   //////////////////////////////////////////////////////////////////////////////////////////////////////////
 };
+

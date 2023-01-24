@@ -1,4 +1,4 @@
-import { GraphQLContext } from "@utils/types";
+import { GraphQLContext} from "../../../../utils/types";
 import { GraphQLError } from "graphql";
 
 /////////////// Mutations //////////////
@@ -11,7 +11,7 @@ export const conversationRead = async (
   const { userId, conversationId } = args;
   const { prisma, session } = context;
   //-----------------------------------------
-  if (!session?.user) {
+  if (!session) {
     throw new GraphQLError("Not authorized");
   }
   //-------------------------------------------------
@@ -33,7 +33,7 @@ export const conversationRead = async (
     //----------
     return true;
     //----------
-  } catch (err) {
+  } catch (err: any) {
     console.log("ConversationRead error", err);
     throw new GraphQLError(err.message);
   }

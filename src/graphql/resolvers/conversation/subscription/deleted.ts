@@ -1,4 +1,4 @@
-import { ConversationDeletedSubscriptionData, GraphQLContext } from "@utils/types";
+import { ConversationDeletedSubscriptionData, GraphQLContext } from "../../../../utils/types";
 import { GraphQLError } from "graphql";
 import { subscriptionEvent } from "../";
 
@@ -12,7 +12,7 @@ export const deleted = {
   /////////////////////////////////////////////////////////////////////////////////////////////
   Filter: (payload: ConversationDeletedSubscriptionData, _: any, context: GraphQLContext) => {
     //----------------------------------------------------------------------------------------
-    if (!context?.session?.user) {
+    if (!context?.session) {
       throw new GraphQLError("Not authorized");
     }
     //-----------------------------------------------------------------------------------------------------

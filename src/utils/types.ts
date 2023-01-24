@@ -18,7 +18,7 @@ export interface User {
  */
 //---------------------------------
 export interface GraphQLContext {
-  session: Session | null;
+  session: string | null;
   prisma: PrismaClient;
   pubsub: PubSub;
 }
@@ -26,7 +26,7 @@ export interface GraphQLContext {
 
 export interface SubscriptionContext extends Context {
   connectionParams: {
-    session?: Session;
+    authToken?: string | null;
   };
 }
 //----------------------------------------

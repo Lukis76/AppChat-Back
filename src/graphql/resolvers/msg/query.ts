@@ -1,4 +1,4 @@
-import { GraphQLContext, MsgFE } from "@utils/types";
+import { GraphQLContext, MsgFE } from "../../../utils/types";
 import { GraphQLError } from "graphql";
 
 ///////////// Query Msg //////////////

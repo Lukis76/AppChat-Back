@@ -1,21 +1,17 @@
-import { GraphQLContext, SendMsgArgs } from '@utils/types'
-import { GraphQLError } from 'graphql'
-import { subscriptionEvent } from '.'
+import { GraphQLContext, SendMsgArgs } from "../../../utils/types";
+import { GraphQLError } from "graphql";
+import { subscriptionEvent } from ".";
 
 ///////////// Mutation Msg///////////////
-export const sendMsg = async (
-  _: any,
-  args: SendMsgArgs,
-  context: GraphQLContext
-): Promise<boolean> => {
+export const sendMsg = async (_: any, args: SendMsgArgs, context: GraphQLContext): Promise<boolean> => {
   ////////////////////////////////////////////
-  const { prisma, session, pubsub } = context
-  const userId = session?.user?.id as string
-  const { id: msgId, senderId, conversationId, body } = args
+  const { prisma, session, pubsub } = context;
+  const userId = session?.user?.id as string;
+  const { id: msgId, senderId, conversationId, body } = args;
   ///////////////////////////////////////////////////////////
   // authorized
   if (!session?.user || session.user.id !== senderId) {
-    throw new GraphQLError('Not authorized')
+    throw new GraphQLError("Not authorized");
   }
   ///////////////////////////////////////////
   try {
@@ -35,7 +31,7 @@ export const sendMsg = async (
           },
         },
       },
-    })
+    });
 
     /////////////////////////////////////////////////////////////////////
     const participant = await prisma.conversationParticipant.findFirst({
@@ -43,10 +39,10 @@ export const sendMsg = async (
         userId,
         conversationId,
       },
-    })
+    });
     ///////////////////////////////////////////////////////
     if (!participant) {
-      throw new GraphQLError('Participant does not exist')
+      throw new GraphQLError("Participant does not exist");
     }
     //////////////////////////////////////////////////////
     // Update Coversation
@@ -58,7 +54,7 @@ export const sendMsg = async (
       data: {
         hasSeenLatestMsg: false,
       },
-    })
+    });
 
     const conversation = await prisma.conversation.update({
       where: {
@@ -99,23 +95,23 @@ export const sendMsg = async (
           },
         },
       },
-    })
+    });
 
     /////////////////////////////////////////////////////
     pubsub.publish(subscriptionEvent.msgSend, {
       msgSend: newMsg,
-    })
+    });
     //------------------------------------------------------
     pubsub.publish(subscriptionEvent.conversationUpdated, {
       conversationUpdated: {
         conversation,
       },
-    })
+    });
     ////////////////////////////////////
-    return true
+    return true;
     /////////////////////////////////////
   } catch (err) {
-    console.log('Send Msg Error', err)
-    throw new GraphQLError('Error send msg')
+    console.log("Send Msg Error", err);
+    throw new GraphQLError("Error send msg");
   }
-}
+};

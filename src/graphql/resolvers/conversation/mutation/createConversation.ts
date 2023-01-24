@@ -1,4 +1,5 @@
-import { GraphQLContext } from "@utils/types";
+import { GraphQLContext} from "../../../../utils/types";
+
 import { GraphQLError } from "graphql";
 import { subscriptionEvent } from "../";
 
@@ -12,7 +13,7 @@ export const createConversation = async (
   const { participantIds } = args;
   //------------------------------------------
   // authorized
-  if (!session?.user) {
+  if (!session) {
     throw new GraphQLError("Not authorized");
   }
   //--------------------------------------------------------
@@ -24,7 +25,7 @@ export const createConversation = async (
           createMany: {
             data: participantIds.map((id) => ({
               userId: id,
-              hasSeenLatestMsg: id === session.user?.id,
+              hasSeenLatestMsg:false // id === session.user?.id,
             })),
           },
         },

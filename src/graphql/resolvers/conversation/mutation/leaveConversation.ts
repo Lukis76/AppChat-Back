@@ -1,4 +1,5 @@
-import { GraphQLContext } from "@utils/types";
+import { GraphQLContext} from "../../../../utils/types";
+
 import { GraphQLError } from "graphql";
 import { subscriptionEvent } from "../";
 
@@ -45,7 +46,7 @@ export const updateParticipants = async (_: any, args: { conversationId: string 
     //-----------
     return true;
     //-----------
-  } catch (err) {
+  } catch (err: any) {
     console.log("Leave Conversation Error", err);
     throw new GraphQLError(err?.message);
   }

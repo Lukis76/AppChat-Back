@@ -1,12 +1,13 @@
-import { GraphQLContext } from "@utils/types";
+import { ConversationFE, GraphQLContext  } from "../../../utils/types";
 import { GraphQLError } from "graphql";
 
 ///////////// Query //////////////////
-export const conversations = async (_: any, __: any, context: GraphQLContext) => {
+export const conversations = async (_: any, __: any, context: GraphQLContext): Promise<Array<ConversationFE>> => {
   //----------------------------------
   const { prisma, session } = context;
+  console.log("==>>> por caca ==>>> ", session)
   //------------------------------------------
-  if (!session?.user) {
+  if (!session) {
     throw new GraphQLError("Not authorized");
   }
   //-----------------------------------------------------------
@@ -37,7 +38,7 @@ export const conversations = async (_: any, __: any, context: GraphQLContext) =>
     });
     //-------------------------------------------------------------------
     return (
-      conversations.filter((c) => !!c.participants.find((p) => p.userId === session?.user?.id)) ||
+      // conversations.filter((c) => !!c.participants.find((p) => p.userId === session?.user?.id)) ||
       []
     );
     //-------------------------------------------------------------------

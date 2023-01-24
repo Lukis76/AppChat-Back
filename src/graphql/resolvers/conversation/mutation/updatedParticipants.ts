@@ -1,4 +1,5 @@
-import { GraphQLContext } from '@utils/types'
+import { GraphQLContext} from "../../../../utils/types";
+
 import { GraphQLError } from 'graphql'
 import { subscriptionEvent } from '../'
 
@@ -12,7 +13,7 @@ export const updateParticipants = async (
   const { conversationId, participantIds } = args
   //------------------------------------------
   // authorized
-  if (!session?.user) {
+  if (!session) {
     throw new GraphQLError('Not authorized')
   }
   //--------------------------------------------------------
