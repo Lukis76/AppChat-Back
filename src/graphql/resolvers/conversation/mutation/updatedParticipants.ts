@@ -1,7 +1,7 @@
-import { GraphQLContext} from "../../../../utils/types";
-
-import { GraphQLError } from 'graphql'
-import { subscriptionEvent } from '../'
+import { GraphQLContext } from "../../../../utils/types";
+import { GraphQLError } from "graphql";
+import { subscriptionEvent } from "..";
+import { validateToken } from "../../../../utils/validateToken";
 
 export const updateParticipants = async (
   _: any,
@@ -9,30 +9,28 @@ export const updateParticipants = async (
   context: GraphQLContext
 ): Promise<boolean> => {
   ////////////////////////////////////////////
-  const { prisma, session, pubsub } = context
-  const { conversationId, participantIds } = args
+  const { prisma, token, pubsub } = context;
+  const { conversationId, participantIds } = args;
   //------------------------------------------
-  // authorized
-  if (!session) {
-    throw new GraphQLError('Not authorized')
-  }
+  // authorized Token
+  await validateToken(token);
   //--------------------------------------------------------
   try {
     const participants = await prisma.conversationParticipant.findMany({
       where: {
         conversationId,
       },
-    })
+    });
     //-------------------------------------------------------------------------
-    const existParticipants = participants.map((p) => p.userId)
+    const existParticipants = participants.map((p) => p.userId);
     //--------------------------------------------------------
     const participantsDeleted = existParticipants.filter(
       (id) => !participantIds.includes(id)
-    )
+    );
     //-------------------------------------------------------
     const participantsCreated = participantIds.filter(
       (id) => !existParticipants.includes(id)
-    )
+    );
     //-------------------------------------------------------
     const transactionStatements = [
       prisma.conversation.update({
@@ -72,8 +70,11 @@ export const updateParticipants = async (
           },
         },
       }),
-    ]
-    console.log("🚀 ~ file: updatedParticipants.ts:75 ~ transactionStatements", transactionStatements)
+    ];
+    console.log(
+      "🚀 ~ file: updatedParticipants.ts:75 ~ transactionStatements",
+      transactionStatements
+    );
     //------------------------------------------------
     if (participantsCreated.length) {
       transactionStatements.push(
@@ -114,12 +115,12 @@ export const updateParticipants = async (
             },
           },
         })
-      )
+      );
     }
     //--------------------------------------------------------------
     const [deletedUpdated, addUpdated] = await prisma.$transaction(
       transactionStatements
-    )
+    );
     //--------------------------------------------------------------
     pubsub.publish(subscriptionEvent.conversationUpdated, {
       conversationUpdated: {
@@ -127,12 +128,12 @@ export const updateParticipants = async (
         addUserIds: participantsCreated,
         removeUserIds: participantsDeleted,
       },
-    })
+    });
     //-----------------------------------
-    return true
+    return true;
     //----------------------------------------
   } catch (err) {
-    console.log('CreateConversationError', err)
-    throw new GraphQLError('Error created conversation')
+    console.log("CreateConversationError", err);
+    throw new GraphQLError("Error created conversation");
   }
-}
+};

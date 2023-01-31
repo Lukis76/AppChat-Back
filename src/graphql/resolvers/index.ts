@@ -7,39 +7,46 @@ import {
   created,
   updated,
   deleted,
-} from './conversation'
-import { createUsername, searchUsers } from './user'
-import { withFilter } from 'graphql-subscriptions'
-import { msgs, sendMsg, send } from './msg'
+} from "./conversation";
+import { withFilter } from "graphql-subscriptions";
+import { msgs, sendMsg, send } from "./msg";
+import {
+  registerUser,
+  loginUser,
+  updateUsername,
+  searchUsers,
+  refresh,
+} from "./user";
 
 export const resolvers = {
   Query: {
-    create : () => {}
-    // conversations, //
-    // searchUsers, //
-    // msgs, //
+    conversations, //
+    searchUsers, //
+    msgs, //
+    refresh,
   },
   Mutation: {
-    create : () => {}
-    // deleteConversation,
-    // updateParticipants,
-    // createConversation,
-    // conversationRead,
-    // createUsername, //
-    // sendMsg,
+    deleteConversation,
+    updateParticipants,
+    createConversation,
+    conversationRead,
+    updateUsername, //
+    sendMsg,
+    loginUser,
+    registerUser,
   },
   Subscription: {
-    // conversationCreated: {
-    //   subscribe: withFilter(created.Resolver, created.Filter),
-    // },
-    // msgSend: {
-    //   subscribe: withFilter(send.Resolver, send.Filter), //
-    // },
-    // conversationUpdated: {
-    //   subscribe: withFilter(updated.Resolver, updated.Filter),
-    // },
-    // conversationDeleted: {
-    //   subscribe: withFilter(deleted.Resolver, deleted.Filter),
-    // },
+    conversationCreated: {
+      subscribe: withFilter(created.Resolver, created.Filter),
+    },
+    msgSend: {
+      subscribe: withFilter(send.Resolver, send.Filter), //
+    },
+    conversationUpdated: {
+      subscribe: withFilter(updated.Resolver, updated.Filter),
+    },
+    conversationDeleted: {
+      subscribe: withFilter(deleted.Resolver, deleted.Filter),
+    },
   },
-}
+};

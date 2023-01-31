@@ -1,18 +1,20 @@
-import { GraphQLContext} from "../../../../utils/types";
-
+import { GraphQLContext } from "../../../../utils/types";
 import { GraphQLError } from "graphql";
-import { subscriptionEvent } from "../";
+import { subscriptionEvent } from "..";
+import { validateToken } from '../../../../utils/validateToken';
 
-export const deleteConversation = async (_: any, args: { conversationId: string }, context: GraphQLContext): Promise<boolean> => {
-  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-  const { prisma, session, pubsub } = context;
+export const deleteConversation = async (
+  _: any,
+  args: { conversationId: string },
+  context: GraphQLContext
+): Promise<boolean> => {
+  //-----------------------------------------
+  const { prisma, token, pubsub } = context;
   const { conversationId } = args;
-  ////////////////////////////////
-  // authorized
-  if (!session) {
-    throw new GraphQLError("Not authorized");
-  }
-  ///////////////////////////////////////////
+  //------------------------------------------
+  // authorized Token
+  await validateToken(token)
+  //--------------------------------------------------------
   try {
     //=========================================================
     // Deleted conversation

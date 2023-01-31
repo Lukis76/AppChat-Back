@@ -2,11 +2,14 @@ import {
   createConversation,
   conversationRead,
   deleteConversation,
-  updateParticipants
-
-} from './mutation'
-import { conversations } from './query'
-import { created, updated, deleted } from './subscription'
+  updateParticipants,
+} from "./mutation";
+import { conversations } from "./query";
+import {
+  created,
+  updated,
+  deleted,
+} from "./subscription";
 export {
   createConversation,
   updateParticipants,
@@ -16,10 +19,10 @@ export {
   created,
   updated,
   deleted,
-}
+};
 
 export const subscriptionEvent = {
-  conversationCreated: 'CONVERSATION_CREATED',
-  conversationUpdated: 'CONVERSATION_UPDATED',
-  conversationDeleted: 'CONVERSATION_DELETED',
-}
+  conversationCreated: "CONVERSATION_CREATED",
+  conversationUpdated: "CONVERSATION_UPDATED",
+  conversationDeleted: "CONVERSATION_DELETED",
+};

@@ -1,24 +1,43 @@
-import { ConversationCreatedSubscriptionData, GraphQLContext } from "../../../../utils/types";
-import { GraphQLError } from "graphql";
-import { subscriptionEvent } from "../";
+import {
+  ConversationCreatedSubscriptionData,
+  GraphQLContext,
+} from "../../../../utils/types";
+import { subscriptionEvent } from "../../conversation";
+import { validateToken } from "../../../../utils/validateToken";
+import { decodeToken } from "../../../../utils/decodeToken";
 
 export const created = {
   //////////////////////////////////////////////////////////
   Resolver: (_: any, __: any, context: GraphQLContext) => {
-    //---------------------------------------------------------------------------
-    return context.pubsub.asyncIterator([subscriptionEvent.conversationCreated]);
-    //---------------------------------------------------------------------------
+    //--------------------------------------
+    return context.pubsub.asyncIterator([
+      subscriptionEvent.conversationCreated,
+    ]);
+    //--------------------------------------
   },
-  /////////////////////////////////////////////////////////////////////////////////////////////
-  Filter: (payload: ConversationCreatedSubscriptionData, _: any, context: GraphQLContext) => {
-    //----------------------------------------------------------------------------------------
-    if (!context?.session) {
-      throw new GraphQLError("Not authorized");
+  /////////////////////////////////////////////////
+  Filter: async (
+    payload: ConversationCreatedSubscriptionData,
+    _: any,
+    context: GraphQLContext
+  ) => {
+    //=========================
+    const { token } = context;
+    //=========================
+    try {
+      //-------------------------
+      // authorized Token
+      await validateToken(token);
+      //---------------------------------
+      const { id } = decodeToken(token);
+      //----------------------------------------------------
+      return !!payload.conversationCreated.participants.find(
+        (p) => p.user.id === id
+      );
+      //------------------------------------------------------
+    } catch (err) {
+      return err;
     }
-    //-----------------------------------------------------------------------------------------------------
-    return !!payload.conversationCreated.participants.find((p) => p.user.id === context?.session?.user?.id);
-    //-----------------------------------------------------------------------------------------------------
   },
-  //////////////////////////////////////////////////////////////////////////////////////////////////////////
+  //////////////////////////////////////////////////////////
 };
-

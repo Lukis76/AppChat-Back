@@ -1,4 +1,5 @@
-import { GraphQLContext} from "../../../../utils/types";
+import { validateToken } from '../../../../utils/validateToken';
+import { GraphQLContext } from "../../../../utils/types";
 import { GraphQLError } from "graphql";
 
 /////////////// Mutations //////////////
@@ -9,12 +10,11 @@ export const conversationRead = async (
 ): Promise<boolean> => {
   ///////////////////////////////////////////
   const { userId, conversationId } = args;
-  const { prisma, session } = context;
-  //-----------------------------------------
-  if (!session) {
-    throw new GraphQLError("Not authorized");
-  }
-  //-------------------------------------------------
+  const { prisma, token } = context;
+  //------------------------------------------
+  // authorized Token
+  await validateToken(token)
+  //--------------------------------------------------------
   try {
     const participant = await prisma.conversationParticipant.findFirst({
       where: { userId, conversationId },

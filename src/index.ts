@@ -10,56 +10,13 @@ import bodyParser from "body-parser";
 import cors from "cors";
 import { PrismaClient } from "@prisma/client";
 import { PubSub } from "graphql-subscriptions";
-// import { getSession } from "next-auth/react";
-// import { resolvers } from "../src/graphql/resolvers";
-// import { typeDefs } from "../src/graphql/typeDefs";
+import { resolvers } from "./graphql/resolvers";
+import { typeDefs } from "./graphql/typeDefs";
 import * as dotenv from "dotenv";
-import { GraphQLContext, SubscriptionContext } from "../src/utils/types";
-import gql from "graphql-tag";
-
-import { LoginUser, RegisterUser } from "./graphql/resolvers/user/mutation";
-import { user } from "./graphql/resolvers/user/query";
-///////////////////////////////////////////////////////////////////////////////////////
-const typeDefs = gql`
-  type User {
-    id: String
-    username: String
-    email: String
-    passwordHash: String
-    token: String
-  }
-
-  input RegisterInput {
-    username: String
-    email: String
-    password: String
-    confirmPassword: String
-  }
-
-  input LoginInput {
-    email: String
-    password: String
-  }
-
-  type Query {
-    user(id: String!): User
-  }
-
-  type Mutation {
-    registerUser(registerInput: RegisterInput): User
-    loginUser(loginInput: LoginInput): User
-  }
-`;
-
-const resolvers = {
-  Query: {
-    user,
-  },
-  Mutation: {
-    loginUser: LoginUser,
-    registerUser: RegisterUser,
-  },
-};
+import {
+  GraphQLContext,
+  SubscriptionContext,
+} from "./utils/types";
 
 ///////////////////////////////////////////////////////////////////////////////////////
 
@@ -92,14 +49,8 @@ const main = async () => {
       schema,
       context: async (ctx: SubscriptionContext): Promise<GraphQLContext> => {
         // ctx is the graphql-ws Context where connectionParams live
-        // if (ctx.connectionParams?.authToken) {
-        //   const { authToken  } = ctx.connectionParams;
-        console.log("context del index - authToken ===> ", ctx.connectionParams.authToken);
-        //   return { authToken, prisma, pubsub };
-        // } else {
-        //   // Otherwise let our resolvers know we don't have a current user
-        // }
-        return { session: null, prisma, pubsub };
+        const token = ctx.connectionParams.authToken;
+        return { token, prisma, pubsub };
       },
     },
     wsServer
@@ -138,15 +89,21 @@ const main = async () => {
     bodyParser.json(),
     expressMiddleware(server, {
       context: async ({ req }): Promise<GraphQLContext> => {
-        // console.log("context del use con getsession - session ==>> ", req.headers);
-        return { session: null, prisma, pubsub };
+        let token = null;
+        const bearer = req?.headers?.authorization;
+        if (bearer.length > 10) {
+          token = bearer.split(" ")[1];
+        }
+        return { token, prisma, pubsub };
       },
     })
   );
 
   // Now that our HTTP server is fully set up, we can listen to it.
   httpServer.listen(process.env.PORT, () => {
-    console.log(`🚀 Server is now running on http://localhost:${process.env.PORT}/graphql 👍 💯 🇦🇷`);
+    console.log(
+      `🚀 Server is now running on http://localhost:${process.env.PORT}/graphql 👍 💯 🇦🇷`
+    );
   });
 };
 main();

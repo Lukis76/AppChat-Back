@@ -3,67 +3,67 @@ import gql from "graphql-tag";
 export const conversationTypeDefs = gql`
   scalar Date
 
-  # type CreateConversationResponse {
-  #   conversationId: String
-  # }
+  type CreateConversationResponse {
+    conversationId: String
+  }
 
-  # type ConversationDeletedSubscriptionPayload {
-  #   id: String
-  # }
+  type ConversationDeletedSubscriptionPayload {
+    id: String
+  }
 
-  # type ConversationUpdatedSubscriptionPayload {
-  #   conversation: Conversation
-  #   addUserIds: [String]
-  #   removeUserIds: [String]
-  # }
+  type ConversationUpdatedSubscriptionPayload {
+    conversation: Conversation
+    addUserIds: [String]
+    removeUserIds: [String]
+  }
 
-  # type Conversation {
-  #   id: String
-  #   latestMsg: Msg
-  #   participants: [Participant]
-  #   createdAt: Date
-  #   updatedAt: Date
-  # }
+  type Conversation {
+    id: String
+    latestMsg: Msg
+    participants: [Participant]
+    createdAt: Date
+    updatedAt: Date
+  }
 
-  # type Participant {
-  #   id: String
-  #   user: User
-  #   hasSeenLatestMsg: Boolean
-  # }
+  type Participant {
+    id: String
+    user: User
+    hasSeenLatestMsg: Boolean
+  }
 
-  # type Query {
-  #   conversations: [Conversation]
-  # }
+  type Query {
+    conversations: [Conversation]
+  }
 
-  # type Mutation {
-  #   createConversation(participantIds: [String]!): CreateConversationResponse
-  # }
+  type Mutation {
+    createConversation(participantIds: [String]!): CreateConversationResponse
+  }
 
-  # type Mutation {
-  #   conversationRead(userId: String!, conversationId: String!): Boolean
-  # }
+  type Mutation {
+    conversationRead(userId: String!, conversationId: String!): Boolean
+  }
 
-  # type Mutation {
-  #   deleteConversation(conversationId: String!): Boolean
-  # }
+  type Mutation {
+    deleteConversation(conversationId: String!): Boolean
+  }
 
-  # type Mutation {
-  #   leaveConversation(conversationId: String!): Boolean
-  # }
+  type Mutation {
+    leaveConversation(conversationId: String!): Boolean
+  }
 
-  # type Mutation {
-  #   updateParticipants(conversationId: String!, participantIds: [String]!): Boolean
-  # }
+  type Mutation {
+    updateParticipants(conversationId: String!, participantIds: [String]!): Boolean
+  }
 
-  # type Subscription {
-  #   conversationCreated: Conversation
-  # }
+  type Subscription {
+    conversationCreated: Conversation
+  }
 
-  # type Subscription {
-  #   conversationUpdated: ConversationUpdatedSubscriptionPayload
-  # }
+  type Subscription {
+    conversationUpdated: ConversationUpdatedSubscriptionPayload
+  }
 
-  # type Subscription {
-  #   conversationDeleted: ConversationDeletedSubscriptionPayload
-  # }
+  type Subscription {
+    conversationDeleted: ConversationDeletedSubscriptionPayload
+  }
 `;

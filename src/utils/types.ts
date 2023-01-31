@@ -1,24 +1,53 @@
-import { PrismaClient, Msg, Conversation, ConversationParticipant } from "@prisma/client";
+import {
+  PrismaClient,
+  Msg,
+  Conversation,
+  ConversationParticipant,
+} from "@prisma/client";
 import { PubSub } from "graphql-subscriptions";
 import { Context } from "graphql-ws/lib/server";
 
 //--------------------------
-export interface Session {
-  user?: User;
+// export interface Session {
+//   user?: User;
+// }
+// //--------------------------
+export interface TypeError {
+  error: {
+    name: string;
+    message: string;
+  };
 }
-//--------------------------
 
-export interface User {
+export type JwtVerifyTypes = {
   id: string;
   username: string;
+  email: string;
+  passHash: string;
+  exp: number | undefined;
+  iat: number | undefined;
+};
+
+export interface User {
+  id?: string;
+  username?: string;
+  email: string;
+  // iat?: number;
+  // exp?: number;
+  token?: string;
 }
 //-------------------------
 /**
  * Server Configuration
  */
+export type Inputs = {
+  username?: string
+  email: string
+  password: string
+}
 //---------------------------------
 export interface GraphQLContext {
-  session: string | null;
+  token: null | string;
   prisma: PrismaClient;
   pubsub: PubSub;
 }

@@ -1,18 +1,23 @@
-import { GraphQLContext} from "../../../../utils/types";
-
+import { GraphQLContext } from "../../../../utils/types";
 import { GraphQLError } from "graphql";
-import { subscriptionEvent } from "../";
+import { subscriptionEvent } from "..";
+import { validateToken } from '../../../../utils/validateToken';
+import { decodeToken } from '../../../../utils/decodeToken';
 
-export const updateParticipants = async (_: any, args: { conversationId: string }, context: GraphQLContext): Promise<boolean> => {
-  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-  const { prisma, session, pubsub } = context;
+export const updateParticipants = async (
+  _: any,
+  args: { conversationId: string },
+  context: GraphQLContext
+): Promise<boolean> => {
+  //////////////////////////////////////////////////////////////
+  const { prisma, token, pubsub } = context;
   const { conversationId } = args;
   //------------------------------------------
-  // authorized
-  if (!session?.user) {
-    throw new GraphQLError("Not authorized");
-  }
-  //-------------------------------------------------------------
+  // authorized Token
+  await validateToken(token)
+  //---------------------------------
+  const { id } = decodeToken(token);
+  //--------------------------------------------------------
   try {
     const leaveConversation = await prisma.conversation.update({
       where: {
@@ -21,7 +26,7 @@ export const updateParticipants = async (_: any, args: { conversationId: string 
       data: {
         participants: {
           deleteMany: {
-            userId: session.user.id,
+            userId: id,
             conversationId,
           },
         },

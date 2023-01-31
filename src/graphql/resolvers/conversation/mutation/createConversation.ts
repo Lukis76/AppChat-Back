@@ -1,7 +1,8 @@
-import { GraphQLContext} from "../../../../utils/types";
+import { GraphQLContext } from "../../../../utils/types";
 
 import { GraphQLError } from "graphql";
-import { subscriptionEvent } from "../";
+import { subscriptionEvent } from "..";
+import { validateToken } from '../../../../utils/validateToken';
 
 export const createConversation = async (
   _: any,
@@ -9,13 +10,11 @@ export const createConversation = async (
   context: GraphQLContext
 ): Promise<{ conversationId: string }> => {
   ////////////////////////////////////////////
-  const { prisma, session, pubsub } = context;
+  const { prisma, token, pubsub } = context;
   const { participantIds } = args;
   //------------------------------------------
-  // authorized
-  if (!session) {
-    throw new GraphQLError("Not authorized");
-  }
+  // authorized Token
+  await validateToken(token)
   //--------------------------------------------------------
   try {
     // Created new convesation
@@ -25,7 +24,7 @@ export const createConversation = async (
           createMany: {
             data: participantIds.map((id) => ({
               userId: id,
-              hasSeenLatestMsg:false // id === session.user?.id,
+              hasSeenLatestMsg: false, // id === session.user?.id,
             })),
           },
         },
@@ -47,10 +46,10 @@ export const createConversation = async (
               select: {
                 id: true,
                 username: true,
-              }
-            }
-          }
-        }
+              },
+            },
+          },
+        },
       },
     });
     //////////////////////////////////////////

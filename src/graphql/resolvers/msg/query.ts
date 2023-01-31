@@ -1,5 +1,7 @@
+import { validateToken } from "../../../utils/validateToken";
 import { GraphQLContext, MsgFE } from "../../../utils/types";
 import { GraphQLError } from "graphql";
+import { decodeToken } from "../../../utils/decodeToken";
 
 ///////////// Query Msg //////////////
 export const msgs = async (
@@ -8,13 +10,14 @@ export const msgs = async (
   context: GraphQLContext
 ): Promise<Array<MsgFE>> => {
   /////////////////////////////////////
-  const { session, prisma } = context;
+  const { token, prisma } = context;
   const { conversationId } = args;
-  ////////////////////////////////
-  if (!session?.user) {
-    throw new GraphQLError("Not authorized");
-  }
-  ////////////////////////////////////////////////////////////
+  //------------------------------------------
+  // authorized Token
+  await validateToken(token);
+  //---------------------------------
+  const { id } = decodeToken(token);
+  //--------------------------------------------------------
   // Verify participant
   const conversation = await prisma.conversation.findUnique({
     where: {
@@ -29,7 +32,7 @@ export const msgs = async (
               username: true,
             },
           },
-        }
+        },
       },
       latestMsg: {
         include: {
@@ -42,20 +45,17 @@ export const msgs = async (
         },
       },
     },
-  })
+  });
   /////////////////////////////////////////////////////////
   if (!conversation) {
-    throw new GraphQLError('Conversation not authorized')
+    throw new GraphQLError("Conversation not authorized");
   }
   ///////////////////////////////////////////////////
-  const allowedView = !!conversation.participants.find(
-    (p) => p.userId === session.user?.id
-  )
+  const allowedView = !!conversation.participants.find((p) => p.userId === id);
   ////////////////////////////////////////
   if (!allowedView) {
-    throw new Error('Not Authorized')
+    throw new Error("Not Authorized");
   }
-
   ////////////////////////////////////////////
   try {
     const msgs = await prisma.msg.findMany({

@@ -1,24 +1,29 @@
 import { GraphQLContext, SendMsgArgs } from "../../../utils/types";
 import { GraphQLError } from "graphql";
 import { subscriptionEvent } from ".";
+import { validateToken } from "../../../utils/validateToken";
+import { decodeToken } from "../../../utils/decodeToken";
 
 ///////////// Mutation Msg///////////////
-export const sendMsg = async (_: any, args: SendMsgArgs, context: GraphQLContext): Promise<boolean> => {
+export const sendMsg = async (
+  _: any,
+  args: SendMsgArgs,
+  context: GraphQLContext
+): Promise<boolean> => {
   ////////////////////////////////////////////
-  const { prisma, session, pubsub } = context;
-  const userId = session?.user?.id as string;
-  const { id: msgId, senderId, conversationId, body } = args;
-  ///////////////////////////////////////////////////////////
-  // authorized
-  if (!session?.user || session.user.id !== senderId) {
-    throw new GraphQLError("Not authorized");
-  }
-  ///////////////////////////////////////////
+  const { prisma, token, pubsub } = context;
+  const { senderId, conversationId, body } = args;
+  //------------------------------------------
+  // authorized Token
+  await validateToken(token);
+  //---------------------------------
+  const { id } = decodeToken(token);
+  //--------------------------------------------------------
   try {
     // Created new msg
     const newMsg = await prisma.msg.create({
       data: {
-        id: msgId,
+        id,
         senderId,
         conversationId,
         body,
@@ -36,7 +41,7 @@ export const sendMsg = async (_: any, args: SendMsgArgs, context: GraphQLContext
     /////////////////////////////////////////////////////////////////////
     const participant = await prisma.conversationParticipant.findFirst({
       where: {
-        userId,
+        userId: id,
         conversationId,
       },
     });

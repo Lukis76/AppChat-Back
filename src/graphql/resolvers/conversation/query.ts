@@ -1,15 +1,21 @@
-import { ConversationFE, GraphQLContext  } from "../../../utils/types";
+import { ConversationFE, GraphQLContext } from "../../../utils/types";
 import { GraphQLError } from "graphql";
+import { validateToken } from "../../../utils/validateToken";
+import { decodeToken } from "../../../utils/decodeToken";
 
 ///////////// Query //////////////////
-export const conversations = async (_: any, __: any, context: GraphQLContext): Promise<Array<ConversationFE>> => {
+export const conversations = async (
+  _: any,
+  __: any,
+  context: GraphQLContext
+): Promise<Array<ConversationFE>> => {
   //----------------------------------
-  const { prisma, session } = context;
-  console.log("==>>> por caca ==>>> ", session)
+  const { prisma, token } = context;
   //------------------------------------------
-  if (!session) {
-    throw new GraphQLError("Not authorized");
-  }
+  // authorized Token
+  await validateToken(token);
+  //--------------------------------
+  const { id } = decodeToken(token);
   //-----------------------------------------------------------
   try {
     const conversations = await prisma.conversation.findMany({
@@ -38,8 +44,9 @@ export const conversations = async (_: any, __: any, context: GraphQLContext): P
     });
     //-------------------------------------------------------------------
     return (
-      // conversations.filter((c) => !!c.participants.find((p) => p.userId === session?.user?.id)) ||
-      []
+      conversations.filter(
+        (c) => !!c.participants.find((p) => p.userId === id)
+      ) || []
     );
     //-------------------------------------------------------------------
   } catch (err) {
