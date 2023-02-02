@@ -11,33 +11,6 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-// model Account {
-//   id                 String       @id @default(auto()) @map("_id") @db.ObjectId
-//   userId             String
-//   type               String
-//   provider           String
-//   providerAccountId  String
-//   refresh_token      String?      @db.String
-//   access_token       String?      @db.String
-//   expires_at         Int?
-//   token_type         String?
-//   scope              String?
-//   id_token           String?      @db.String
-//   session_state      String?
-
-//   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-//   @@unique([provider, providerAccountId])
-// }
-
-// model Session {
-//   id                 String       @id @default(auto()) @map("_id") @db.ObjectId
-//   sessionToken       String       @unique
-//   userId             String
-//   expires            DateTime
-//   user               User         @relation(fields: [userId], references: [id], onDelete: Cascade)
-// }
-
 model User {
   id            String                    @id @default(auto()) @map("_id") @db.ObjectId
   name          String?
@@ -49,8 +22,6 @@ model User {
   token         String?                   @unique
   conversations ConversationParticipant[]
   msgs          Msg[]
-  // accounts           Account[]
-  // sessions           Session[]
   createdAt     DateTime                  @default(now())
   updatedAt     DateTime                  @updatedAt
 }
@@ -69,7 +40,7 @@ model Conversation {
   participants ConversationParticipant[]
   msg          Msg[]                     @relation("conversationMsgs")
   latestMsg    Msg?                      @relation(name: "latestConversationMsg", fields: [latestMsgId], references: [id], onUpdate: NoAction, onDelete: NoAction)
-  latestMsgId  String?                   @unique
+  latestMsgId  String?                   @unique @db.ObjectId
   createdAt    DateTime                  @default(now())
   updatedAt    DateTime                  @updatedAt
 }
@@ -77,9 +48,9 @@ model Conversation {
 model ConversationParticipant {
   id               String       @id @default(auto()) @map("_id") @db.ObjectId
   user             User         @relation(fields: [userId], references: [id])
-  userId           String
+  userId           String       @db.ObjectId
   conversation     Conversation @relation(fields: [conversationId], references: [id])
-  conversationId   String
+  conversationId   String       @db.ObjectId
   hasSeenLatestMsg Boolean
   createdAt        DateTime     @default(now())
   updatedAt        DateTime     @updatedAt
@@ -88,9 +59,9 @@ model ConversationParticipant {
 model Msg {
   id             String        @id @default(auto()) @map("_id") @db.ObjectId
   conversation   Conversation  @relation(name: "conversationMsgs", fields: [conversationId], references: [id])
-  conversationId String
+  conversationId String        @db.ObjectId
   isLatestIn     Conversation? @relation("latestConversationMsg")
-  senderId       String
+  senderId       String        @db.ObjectId
   sender         User          @relation(fields: [senderId], references: [id])
   body           String
   createdAt      DateTime      @default(now())

@@ -1,8 +1,7 @@
 import { GraphQLContext } from "../../../../utils/types";
-
 import { GraphQLError } from "graphql";
 import { subscriptionEvent } from "..";
-import { validateToken } from '../../../../utils/validateToken';
+import { validateToken } from "../../../../utils/validateToken";
 
 export const createConversation = async (
   _: any,
@@ -14,7 +13,7 @@ export const createConversation = async (
   const { participantIds } = args;
   //------------------------------------------
   // authorized Token
-  await validateToken(token)
+  await validateToken(token);
   //--------------------------------------------------------
   try {
     // Created new convesation
@@ -52,6 +51,7 @@ export const createConversation = async (
         },
       },
     });
+    console.log("🚀 ~ file: createConversation.ts:54 ~ conversation", conversation)
     //////////////////////////////////////////
     // emit a conversation event using pubsub
     pubsub.publish(subscriptionEvent.conversationCreated, {

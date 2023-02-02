@@ -13,10 +13,7 @@ import { PubSub } from "graphql-subscriptions";
 import { resolvers } from "./graphql/resolvers";
 import { typeDefs } from "./graphql/typeDefs";
 import * as dotenv from "dotenv";
-import {
-  GraphQLContext,
-  SubscriptionContext,
-} from "./utils/types";
+import { GraphQLContext, SubscriptionContext } from "./utils/types";
 
 ///////////////////////////////////////////////////////////////////////////////////////
 
@@ -50,6 +47,7 @@ const main = async () => {
       context: async (ctx: SubscriptionContext): Promise<GraphQLContext> => {
         // ctx is the graphql-ws Context where connectionParams live
         const token = ctx.connectionParams.authToken;
+        console.log("🚀 ~ file: index.ts:53 ~ context: ~ token =>>", token);
         return { token, prisma, pubsub };
       },
     },
@@ -94,6 +92,7 @@ const main = async () => {
         if (bearer.length > 10) {
           token = bearer.split(" ")[1];
         }
+        console.log("🚀 ~ file: index.ts:97 ~ context: ~ token =>>", token);
         return { token, prisma, pubsub };
       },
     })

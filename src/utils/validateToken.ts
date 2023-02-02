@@ -1,5 +1,5 @@
 import { GraphQLError } from "graphql";
-import { decodeToken } from './decodeToken';
+import { decodeToken } from "./decodeToken";
 
 export const validateToken = async (token: string) => {
   try {
@@ -8,9 +8,8 @@ export const validateToken = async (token: string) => {
       throw new Error("The token autentication is null");
     }
     //------------------------------------------------------
-    const { exp } = decodeToken(token)
-    //-------------------------------------------
-    const timeExpired = exp;
+    const { exp } = decodeToken(token);
+    const timeExpired = Number(new Date(exp * 1000).getTime());
     const timeDate = Number(new Date());
     //-----------------------------------------------------------------
     if (timeExpired > timeDate) {
