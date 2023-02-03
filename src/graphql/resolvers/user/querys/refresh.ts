@@ -12,7 +12,7 @@ export const refresh = async (
   try {
     //-----------------------------------------------------------
     // authorized Token
-    const { exp } = decodeToken(token);
+    const { exp } = await decodeToken(token);
     const expiredToken = Number(new Date(exp * 1000).getTime());
     const timeDate = Number(new Date());
     //----------------------------------------------------------

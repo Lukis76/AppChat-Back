@@ -17,7 +17,7 @@ export const sendMsg = async (
   // authorized Token
   await validateToken(token);
   //---------------------------------
-  const { id } = decodeToken(token);
+  const { id } = await decodeToken(token);
   //--------------------------------------------------------
   try {
     // Created new msg

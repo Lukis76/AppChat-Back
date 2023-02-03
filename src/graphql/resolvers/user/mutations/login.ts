@@ -27,6 +27,7 @@ export const loginUser = async (
     }
     //-------------------------------------------------------------------
     const userToken = {
+      id: user.id,
       username: user.username,
       email: user.email,
       passHash: user.passwordHash,

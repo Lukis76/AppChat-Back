@@ -1,17 +1,8 @@
-import {
-  PrismaClient,
-  Msg,
-  Conversation,
-  ConversationParticipant,
-} from "@prisma/client";
+import { PrismaClient, Msg, Conversation, ConversationParticipant } from "@prisma/client";
 import { PubSub } from "graphql-subscriptions";
 import { Context } from "graphql-ws/lib/server";
 
 //--------------------------
-// export interface Session {
-//   user?: User;
-// }
-// //--------------------------
 export interface TypeError {
   error: {
     name: string;
@@ -32,8 +23,6 @@ export interface User {
   id?: string;
   username?: string;
   email: string;
-  // iat?: number;
-  // exp?: number;
   token?: string;
 }
 //-------------------------
@@ -41,10 +30,10 @@ export interface User {
  * Server Configuration
  */
 export type Inputs = {
-  username?: string
-  email: string
-  password: string
-}
+  username?: string;
+  email: string;
+  password: string;
+};
 //---------------------------------
 export interface GraphQLContext {
   token: null | string;

@@ -28,7 +28,7 @@ export const updated = {
       // authorized Token
       await validateToken(token);
       //---------------------------------
-      const { id } = decodeToken(token);
+      const { id } = await decodeToken(token);
       //------------------------------------------------------
       const { conversation, addUserIds, removeUserIds } =
         payload.conversationUpdated;

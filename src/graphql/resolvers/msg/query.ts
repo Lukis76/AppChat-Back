@@ -16,7 +16,7 @@ export const msgs = async (
   // authorized Token
   await validateToken(token);
   //---------------------------------
-  const { id } = decodeToken(token);
+  const { id } = await decodeToken(token);
   //--------------------------------------------------------
   // Verify participant
   const conversation = await prisma.conversation.findUnique({

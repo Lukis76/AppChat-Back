@@ -13,9 +13,11 @@ export const conversations = async (
   const { prisma, token } = context;
   //------------------------------------------
   // authorized Token
-  await validateToken(token);
+  const validate = await validateToken(token);
+  console.log("validate token in conversations server > wrapper => ", validate);
   //--------------------------------
-  const { id } = decodeToken(token);
+  const { id } = await decodeToken(token);
+  console.log("decode token in conversations server > wrapper => ", id);
   //-----------------------------------------------------------
   try {
     const conversations = await prisma.conversation.findMany({
@@ -42,12 +44,9 @@ export const conversations = async (
         },
       },
     });
+    console.log("conversations data server > data wrapper => ", conversations[0].participants, id);
     //-------------------------------------------------------------------
-    return (
-      conversations.filter(
-        (c) => !!c.participants.find((p) => p.userId === id)
-      ) || []
-    );
+    return conversations.filter((c) => Boolean(c.participants.find((p) => p.userId === id))) || [];
     //-------------------------------------------------------------------
   } catch (err) {
     console.log("Conversations Error", err);

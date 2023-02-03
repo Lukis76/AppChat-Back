@@ -51,9 +51,10 @@ export const registerUser = async (
     }
     //------------------------------------------------------------------
     const userToken = {
-      username,
-      email,
-      passHash,
+      id: newUser.id,
+      username: newUser.username,
+      email: newUser.email,
+      passHash: newUser.passwordHash,
     };
     //------------------------------------------------------------
     const token = jwt.sign(userToken, process.env.DECODE_TOKEN, {

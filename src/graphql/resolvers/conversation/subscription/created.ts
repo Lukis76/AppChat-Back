@@ -29,7 +29,7 @@ export const created = {
       // authorized Token
       await validateToken(token);
       //---------------------------------
-      const { id } = decodeToken(token);
+      const { id } = await decodeToken(token);
       //----------------------------------------------------
       return !!payload.conversationCreated.participants.find(
         (p) => p.user.id === id

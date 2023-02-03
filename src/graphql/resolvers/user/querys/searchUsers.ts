@@ -15,7 +15,7 @@ export const searchUsers = async (
   // authorized Token
   await validateToken(token);
   //---------------------------------
-  const { id: myId } = decodeToken(token);
+  const { id: myId } = await decodeToken(token);
   //------------------------------------------
   const users = await prisma.user.findMany({
     where: {

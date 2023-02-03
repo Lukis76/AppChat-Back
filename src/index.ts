@@ -89,6 +89,7 @@ const main = async () => {
       context: async ({ req }): Promise<GraphQLContext> => {
         let token = null;
         const bearer = req?.headers?.authorization;
+        console.log("🚀 ~ file: index.ts:92 ~ context: ~ token autorization =>>", bearer); 
         if (bearer.length > 10) {
           token = bearer.split(" ")[1];
         }

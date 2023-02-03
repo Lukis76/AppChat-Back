@@ -29,7 +29,7 @@ export const deleted = {
       // authorized Token
       await validateToken(token);
       //---------------------------------
-      const { id } = decodeToken(token);
+      const { id } = await decodeToken(token);
       //------------------------------------------------------
       return !!payload.conversationDeleted.participants.find(
         (p) => p.userId === id

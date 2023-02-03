@@ -16,7 +16,7 @@ export const updateParticipants = async (
   // authorized Token
   await validateToken(token)
   //---------------------------------
-  const { id } = decodeToken(token);
+  const { id } = await decodeToken(token);
   //--------------------------------------------------------
   try {
     const leaveConversation = await prisma.conversation.update({
