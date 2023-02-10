@@ -3,24 +3,30 @@ import { decodeToken } from "../../../../utils/decodeToken";
 
 export const refresh = async (
   _: any,
-  __: any,
+  args: {token: string},
   context: GraphQLContext
 ): Promise<{ timeOut: boolean } | TypeError> => {
   //=============================================
-  const { token } = context;
+  const { token } = args;
+  console.log("🚀 ~ file: refresh.ts:11 ~ token", token)
   //=========================
   try {
     //-----------------------------------------------------------
     // authorized Token
     const { exp } = await decodeToken(token);
-    const expiredToken = Number(new Date(exp * 1000).getTime());
+    console.log("🚀 ~ file: refresh.ts:16 ~ exp", exp)
+    const expiredToken = exp ? Number(new Date(exp * 1000).getTime()) : 0;
     const timeDate = Number(new Date());
     //----------------------------------------------------------
     if (expiredToken < timeDate) {
+      console.log('tineOut ==>> ', false)
       return {
+        
         timeOut: false,
       };
     } else {
+      console.log('tineOut ==>> ', true)
+
       return {
         timeOut: true,
       };

@@ -12,12 +12,12 @@ export const sendMsg = async (
 ): Promise<boolean> => {
   ////////////////////////////////////////////
   const { prisma, token, pubsub } = context;
-  const { senderId, conversationId, body } = args;
+  const { senderId, conversationId, body, id} = args;
   //------------------------------------------
   // authorized Token
   await validateToken(token);
   //---------------------------------
-  const { id } = await decodeToken(token);
+  const { userId } = await decodeToken(token);
   //--------------------------------------------------------
   try {
     // Created new msg
@@ -41,7 +41,7 @@ export const sendMsg = async (
     /////////////////////////////////////////////////////////////////////
     const participant = await prisma.conversationParticipant.findFirst({
       where: {
-        userId: id,
+        userId,
         conversationId,
       },
     });

@@ -25,6 +25,7 @@ export const userTypeDefs = gql`
     username: String
     email: String
     password: String
+    confirmPassword: String
   }
 
   input LoginInput {
@@ -42,7 +43,7 @@ export const userTypeDefs = gql`
   }
  
   type Query {
-    refresh(id: String): TimeOut
+    refresh(token: String): TimeOut
     searchUsers(username: String!): [SearchUser]
   }
 
