@@ -26,7 +26,6 @@
     "graphql-tag": "^2.12.6",
     "graphql-ws": "^5.11.2",
     "jsonwebtoken": "^9.0.0",
-    "next-auth": "^4.18.8",
     "ws": "^8.12.0"
   },
   "devDependencies": {
