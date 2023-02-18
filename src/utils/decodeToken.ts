@@ -2,7 +2,6 @@ import jwt from "jsonwebtoken";
 import { JwtVerifyTypes } from "./types";
 
 export const decodeToken = async (token: string) => {
-  console.log("🚀 ~ file: decodeToken.ts:5 ~ decodeToken ~ token", token)
   //------------------------------------
   try {
     //------------------------------------
@@ -11,7 +10,6 @@ export const decodeToken = async (token: string) => {
     }
     //------------------------------------
     const parsToken = await JSON.parse(token).toString()
-    console.log("🚀 ~ file: decodeToken.ts:14 ~ decodeToken ~ parsToken", parsToken)
     const userToken = jwt.verify(parsToken, process.env.DECODE_TOKEN ) as JwtVerifyTypes
     //----------------------------
     return { ...userToken };

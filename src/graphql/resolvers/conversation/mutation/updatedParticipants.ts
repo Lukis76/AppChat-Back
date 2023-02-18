@@ -71,10 +71,6 @@ export const updateParticipants = async (
         },
       }),
     ];
-    console.log(
-      "🚀 ~ file: updatedParticipants.ts:75 ~ transactionStatements",
-      transactionStatements
-    );
     //------------------------------------------------
     if (participantsCreated.length) {
       transactionStatements.push(

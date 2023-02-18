@@ -1,23 +1,23 @@
-import { ConversationFE, GraphQLContext } from "../../../utils/types";
-import { GraphQLError } from "graphql";
-import { validateToken } from "../../../utils/validateToken";
-import { decodeToken } from "../../../utils/decodeToken";
+import { ConversationFE, GraphQLContext } from '../../../utils/types'
+import { GraphQLError } from 'graphql'
+import { validateToken } from '../../../utils/validateToken'
+import { decodeToken } from '../../../utils/decodeToken'
 
 ///////////// Query //////////////////
 export const conversations = async (
   _: any,
-  __: any,
+  args: any,
   context: GraphQLContext
 ): Promise<Array<ConversationFE>> => {
   //----------------------------------
-  const { prisma, token } = context;
+  const { token } = args
+  const { prisma } = context
+  console.log('🚀 ~ file: query.ts:14 ~ token', token)
   //------------------------------------------
   // authorized Token
-  const validate = await validateToken(token);
-  console.log("validate token in conversations server > wrapper => ", validate);
+  const validate = await validateToken(token)
   //--------------------------------
-  const { id } = await decodeToken(token);
-  console.log("decode token in conversations server > wrapper => ", id);
+  const { id } = await decodeToken(token)
   //-----------------------------------------------------------
   try {
     const conversations = await prisma.conversation.findMany({
@@ -43,13 +43,18 @@ export const conversations = async (
           },
         },
       },
-    });
-    console.log("conversations data server > data wrapper => ", conversations[0].participants, id);
-    //-------------------------------------------------------------------
-    return conversations.filter((c) => Boolean(c.participants.find((p) => p.userId === id))) || [];
-    //-------------------------------------------------------------------
+    })
+    console.log('🚀 ~ file: query.ts:45 ~ conversations', conversations)
+    console.log('🚀 ~ file: query.ts:19 ~ id', id)
+    //-----------------------------------------------------
+    const result = conversations.filter((c) =>
+      c.participants.find((p) => p.userId === id)
+    )
+    console.log('🚀 ~ file: query.ts:50 ~ result', result)
+    return result
+    //-----------------------------------------------------
   } catch (err) {
-    console.log("Conversations Error", err);
-    throw new GraphQLError("Conversations Error");
+    console.log('Conversations Error', err)
+    throw new GraphQLError('Conversations Error')
   }
-};
+}

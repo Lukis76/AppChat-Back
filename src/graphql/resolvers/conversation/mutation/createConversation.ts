@@ -51,7 +51,6 @@ export const createConversation = async (
         },
       },
     });
-    console.log("🚀 ~ file: createConversation.ts:54 ~ conversation", conversation)
     //////////////////////////////////////////
     // emit a conversation event using pubsub
     pubsub.publish(subscriptionEvent.conversationCreated, {

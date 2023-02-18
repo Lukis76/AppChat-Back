@@ -8,24 +8,20 @@ export const refresh = async (
 ): Promise<{ timeOut: boolean } | TypeError> => {
   //=============================================
   const { token } = args;
-  console.log("🚀 ~ file: refresh.ts:11 ~ token", token)
   //=========================
   try {
     //-----------------------------------------------------------
     // authorized Token
     const { exp } = await decodeToken(token);
-    console.log("🚀 ~ file: refresh.ts:16 ~ exp", exp)
     const expiredToken = exp ? Number(new Date(exp * 1000).getTime()) : 0;
     const timeDate = Number(new Date());
     //----------------------------------------------------------
     if (expiredToken < timeDate) {
-      console.log('tineOut ==>> ', false)
       return {
         
         timeOut: false,
       };
     } else {
-      console.log('tineOut ==>> ', true)
 
       return {
         timeOut: true,

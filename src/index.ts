@@ -46,7 +46,6 @@ const main = async () => {
       context: async (ctx: SubscriptionContext): Promise<GraphQLContext> => {
         // ctx is the graphql-ws Context where connectionParams live
         const token = ctx.connectionParams.authToken
-        console.log('🚀 ~ file: index.ts:53 ~ context: ~ token =>>', token)
         return { token, prisma, pubsub }
       },
     },
@@ -88,14 +87,11 @@ const main = async () => {
       context: async ({ req }): Promise<GraphQLContext> => {
         let token = null
         const bearer = req?.headers?.authorization
-        console.log(
-          '🚀 ~ file: index.ts:92 ~ context: ~ token autorization =>>',
-          bearer
-        )
+        console.log("🚀 ~ file: index.ts:90 ~ context: ~ bearer", bearer)
+        
         if (bearer.length > 10) {
           token = bearer.split(' ')[1]
         }
-        console.log('🚀 ~ file: index.ts:97 ~ context: ~ token =>>', token)
         return { token, prisma, pubsub }
       },
     })

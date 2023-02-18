@@ -32,7 +32,7 @@ export const conversationTypeDefs = gql`
   }
 
   type Query {
-    conversations: [Conversation]
+    conversations(token: String): [Conversation]
   }
 
   type Mutation {
