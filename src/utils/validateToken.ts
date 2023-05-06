@@ -9,6 +9,7 @@ export const validateToken = async (token: string) => {
     }
     //------------------------------------------------------
     const { exp } = await decodeToken(token);
+    console.log('decodeToken => ', exp)
     const timeExpired = Number(new Date(exp * 1000).getTime());
     const timeDate = Number(new Date());
     //-----------------------------------------------------------------
