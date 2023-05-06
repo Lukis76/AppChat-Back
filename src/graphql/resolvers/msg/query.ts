@@ -6,17 +6,22 @@ import { decodeToken } from "../../../utils/decodeToken";
 ///////////// Query Msg //////////////
 export const msgs = async (
   _: any,
-  args: { conversationId: string },
+  args: { conversationId: string, token: string },
   context: GraphQLContext
 ): Promise<Array<MsgFE>> => {
   /////////////////////////////////////
-  const { token, prisma } = context;
-  const { conversationId } = args;
+  const { prisma } = context;
+  const { conversationId, token} = args;
+
+  console.log("token => ", token)
+  console.log("id cinversation => ", conversationId)
   //------------------------------------------
   // authorized Token
-  await validateToken(token);
+  const tok = await validateToken(token);
+  console.log('validate token => ', tok)
   //---------------------------------
   const { id } = await decodeToken(token);
+  console.log('decode token => ', id)
   //--------------------------------------------------------
   // Verify participant
   const conversation = await prisma.conversation.findUnique({

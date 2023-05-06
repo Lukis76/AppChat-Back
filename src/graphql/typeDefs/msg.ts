@@ -11,7 +11,7 @@ export const msgTypeDefs = gql`
   }
 
   type Query {
-    msgs(conversationId: String): [Msg]
+    msgs(conversationId: String, token: String): [Msg]
   }
 
   type Mutation {
