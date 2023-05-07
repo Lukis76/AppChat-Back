@@ -56,7 +56,7 @@ export const msgs = async (
     throw new GraphQLError("Conversation not authorized");
   }
   ///////////////////////////////////////////////////
-  const allowedView = !!conversation.participants.find((p) => p.userId === id);
+  const allowedView = !!conversation.participants.find((p: any) => p.userId === id);
   ////////////////////////////////////////
   if (!allowedView) {
     throw new Error("Not Authorized");

@@ -47,8 +47,8 @@ export const conversations = async (
     console.log('🚀 ~ file: query.ts:45 ~ conversations', conversations)
     console.log('🚀 ~ file: query.ts:19 ~ id', id)
     //-----------------------------------------------------
-    const result = conversations.filter((c) =>
-      c.participants.find((p) => p.userId === id)
+    const result = conversations.filter((c: any) =>
+      c.participants.find((p: any) => p.userId === id)
     )
     console.log('🚀 ~ file: query.ts:50 ~ result', result)
     return result

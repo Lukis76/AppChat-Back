@@ -26,6 +26,6 @@ export const searchUsers = async (
     },
   });
   //-------------------------------------------
-  return users.filter((el) => el.id !== myId);
+  return users.filter((el: any) => el.id !== myId);
   //-------------------------------------------
 };

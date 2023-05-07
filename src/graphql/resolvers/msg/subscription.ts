@@ -17,7 +17,9 @@ export const send = {
     _: GraphQLContext
   ) => {
     //------------------------------------------------------------
-    return payload.msgSend.conversationId === args.conversationId;
+    console.log(payload.msgSend)
+    // return payload.msgSend.conversationId === args.conversationId;
+    return false
     //-----------------------------------------------------------
   },
   ////////////////////////////////////////////////////////////////

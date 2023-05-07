@@ -98,9 +98,10 @@ const main = async () => {
   )
 
   // Now that our HTTP server is fully set up, we can listen to it.
-  httpServer.listen(process.env.PORT, () => {
+  const port = process.env.PORT || 3003
+  httpServer.listen( port, () => {
     console.log(
-      `🚀 Server is now running on http://localhost:${process.env.PORT}/graphql 👍 💯 🇦🇷`
+      `🚀 Server is now running on http://localhost:${port}/graphql 👍 💯 🇦🇷`
     )
   })
 }

@@ -22,10 +22,10 @@ export const updateParticipants = async (
       },
     });
     //-------------------------------------------------------------------------
-    const existParticipants = participants.map((p) => p.userId);
+    const existParticipants = participants.map((p: {userId: string}) => p.userId);
     //--------------------------------------------------------
     const participantsDeleted = existParticipants.filter(
-      (id) => !participantIds.includes(id)
+      (id: string) => !participantIds.includes(id)
     );
     //-------------------------------------------------------
     const participantsCreated = participantIds.filter(

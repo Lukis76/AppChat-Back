@@ -32,7 +32,7 @@ export const deleted = {
       const { id } = await decodeToken(token);
       //------------------------------------------------------
       return !!payload.conversationDeleted.participants.find(
-        (p) => p.userId === id
+        (p: any) => p.userId === id
       );
       //------------------------------------------------------
     } catch (err) {
